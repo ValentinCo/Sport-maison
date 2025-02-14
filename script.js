@@ -119,116 +119,15 @@ sessionSelect.addEventListener('change', function () {
     }
 });
 
-
-
     } catch (error) {
         console.error('Erreur:', error);
     }
 }
-
-async function saveData() {
-    const table = document.getElementById('data-table');
-    const rows = Array.from(table.getElementsByTagName('tr'));
-    
-    const url = 'https://script.google.com/macros/s/AKfycbxKTnznU2muOoA5rEla8eWVsem9gNZxPFXZT4MoyBFnq09ugJCdSzaQFOHSgS0MgNNl/exec'; // URL de ton script Apps Script déployé
-    
-    const dataToSend = [];
-    
-    // Récupérer les données du tableau
-    rows.forEach(row => {
-        const rowData = [];
-        row.querySelectorAll('td').forEach(td => {
-            const input = td.querySelector('input');
-            if (input) {
-                rowData.push(input.value); // Si un input existe, récupérer sa valeur
-            } else {
-                rowData.push(td.textContent); // Sinon, récupérer le texte de la cellule
-            }
-        });
-        if (rowData.length > 0) {
-            dataToSend.push(rowData);
-        }
-    });
-
-    // Envoi des données avec fetch (requête POST)
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                data: dataToSend  // Les données envoyées sous forme de JSON
-            })
-        });
-
-        const result = await response.text();  // Lire la réponse du serveur
-        console.log('Réponse du serveur:', result);
-
-    } catch (error) {
-        console.error('Erreur lors de l\'envoi des données:', error);
-    }
-}
-
-
-
-
 
 // Appeler la fonction pour récupérer les données au chargement de la page
 fetchData();
 
 document.getElementById('save-button').addEventListener('click', saveData);
 
-let accessToken = 'ya29.a0AXeO80RdiNByhnJlPUqnOsPLRst62ZYqfatpts3oa3Y5-WCKEQG3G1ric-0x5zdxeGCs-cKx7l5IDzop01D5t71i46kV5ouE0D4jUAB-VCRMzzqZppH289ZKHNlPlUkoVBOXKJD2Kl8CyQnJbUV_kIIJEZ4vTXoBMXlwnViZaCgYKARESARASFQHGX2MiUW8lAsPoj59GOA-PSSlfwA0175';  // Ton token actuel
-let refreshToken = '1//04i5aLnnLGLvWCgYIARAAGAQSNwF-L9Irkp3U0hzeMh6SxpdC-Aow_vkvCXJ5Q3Xi-xjGzzPkU-CEbrhFm3bQ1PQMICuUCl7NzeI'; // Ton refresh token
 
-// Fonction pour rafraîchir le token
-async function refreshAccessToken(refreshToken) {
-    const clientId = '203719887174-fd5774frjcbojluu5duduatlptp55gm6.apps.googleusercontent.com'; // Ton client_id
-    const clientSecret = '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'; // Ton client_secret
-    const tokenUrl = 'https://oauth2.googleapis.com/token';
-
-    try {
-        const response = await fetch(tokenUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-                'client_id': clientId,
-                'client_secret': clientSecret,
-                'refresh_token': refreshToken,
-                'grant_type': 'refresh_token'
-            })
-        });
-
-        const data = await response.json();
-        if (data.error) {
-            console.error('Erreur lors du renouvellement du token :', data.error);
-            return null;
-        }
-
-        console.log('Token renouvelé avec succès');
-        return data.access_token; // Retourne le nouveau token
-    } catch (error) {
-        console.error('Erreur réseau ou autre lors du renouvellement du token :', error);
-        return null;
-    }
-}
-
-// Fonction pour vérifier le token avant d'effectuer une requête
-async function getAccessToken() {
-    const expirationTime = 3599; // L'`access_token` expire après 3600 secondes (1 heure)
-    const currentTime = Math.floor(Date.now() / 1000); // Temps actuel en secondes
-
-    // Si le token est expiré ou sur le point de l'être (moins de 10 minutes), le renouveler
-    if (!accessToken || (currentTime + 600 >= expirationTime)) {
-        console.log('Le token est expiré ou sur le point d\'expirer, renouvellement nécessaire.');
-        const newToken = await refreshAccessToken(refreshToken);
-        if (newToken) {
-            accessToken = newToken;
-        }
-    }
-
-    return accessToken;
-}
+//Sauvegarde
