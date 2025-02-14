@@ -130,4 +130,45 @@ fetchData();
 document.getElementById('save-button').addEventListener('click', saveData);
 
 
+
 //Sauvegarde
+
+async function saveData() {
+    const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+    const rows = tableBody.getElementsByTagName('tr');
+    const dataToSave = [];
+
+    Array.from(rows).forEach(row => {
+        const cells = row.getElementsByTagName('td');
+        const rowData = [];
+        Array.from(cells).forEach(cell => {
+            const input = cell.querySelector('input');
+            if (input) {
+                rowData.push(input.value);
+            } else {
+                rowData.push(cell.textContent);
+            }
+        });
+        dataToSave.push(rowData);
+    });
+
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxG6Z_Zd_I5ErQoq3SlcTFfGO8UyeKjotCG3q6stkGrwv-hixRT8DUzrRNnTe7ZlKIz/exec', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataToSave.flat()), // Envoyer les données au format JSON
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors de la sauvegarde des données');
+        }
+
+        alert('Données sauvegardées avec succès!');
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la sauvegarde des données.');
+    }
+}
+
