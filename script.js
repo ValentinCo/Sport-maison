@@ -129,46 +129,48 @@ fetchData();
 
 document.getElementById('save-button').addEventListener('click', saveData);
 
-
-
-//Sauvegarde
+//save
 
 async function saveData() {
     const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
     const rows = tableBody.getElementsByTagName('tr');
     const dataToSave = [];
 
+    // Récupérer les données ligne par ligne
     Array.from(rows).forEach(row => {
         const cells = row.getElementsByTagName('td');
         const rowData = [];
         Array.from(cells).forEach(cell => {
             const input = cell.querySelector('input');
-            if (input) {
-                rowData.push(input.value);
-            } else {
-                rowData.push(cell.textContent);
-            }
+            rowData.push(input ? input.value : cell.textContent);
         });
         dataToSave.push(rowData);
     });
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyzfJEFMS3IKb3QzfrTQn5RokF0F5WGEF4GS0qTdJoijjmKaJKyWN7MW4pls0DTHy_f/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbz7Zkqby_VlqIY5wvtnQTrQcg-6Dw_upxqnanvq0DPZ_41zidlTEEEDN1O5Ptxyg-NH/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(dataToSave.flat()), // Envoyer les données au format JSON
+            mode: 'no-cors',
+            body: JSON.stringify(dataToSave), // Envoi de toutes les données d'un coup
         });
 
-        if (!response.ok) {
-            throw new Error('Erreur lors de la sauvegarde des données');
-        }
-
-        alert('Données sauvegardées avec succès!');
+        alert('Données envoyées avec succès !');
     } catch (error) {
         console.error('Erreur:', error);
         alert('Erreur lors de la sauvegarde des données.');
     }
 }
+
+
+  
+
+
+
+
+
+
+
 
