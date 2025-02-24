@@ -148,7 +148,7 @@ async function saveData() {
     });
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycby9TO2jGGAy1GMKYGwvyqGGXysMWwcpxM1P2qf0UNONrRS67_P5m1djPERz4ctkE60e/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzokacTCeTgydvN_OUrx7zWJdn7Y-PWZXEjLfF4M_w_uQ20Uk6agUjqLCc09iC_1New/exec', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
